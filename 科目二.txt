@@ -1,0 +1,935 @@
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2001
+【题目】（单选）以下选项中不符合编程规范的是
+A. int errorCode = 5;
+B. int hour = time * 60 * 60;
+C. float mid = len / 2;
+D. constexpr int SYSTEM_VERSION = 4096;
+【答案】A
+【题解】
+不能用魔数，可以像D一样定义成常量
+所谓魔数和魔字符串就是指在代码中出现但没有解释的数字常量或字符串，又称魔法值
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2002
+【题目】（单选）对于名字空间(namespace)以下哪个说法是错误的
+A. 用关键字namespace定义的名字空间必须有一个显示的名字且是独一无二的。
+B. 通过使用声明(the using-declaration)引入的元素名字会遮蔽名字相同的非局部声明。
+C. 表达式::a，一般表示引用全局作用域中声明的元素a。
+D. 名字空间是允许嵌套的。
+【答案】A
+【题解】
+namespace定义的名字空间可以是匿名的
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2003
+【题目】（单选）根据hawkC++语言编程规范，针对.cpp文件中不需要导出的变量、常量或者函数，下列哪种说法是正确的？
+A. 只能使用 static 修饰
+B. 只能使用匿名 namespace 封装
+C. 可以使用匿名 namespace 封装或 static 修饰，推荐使用匿名 namespace
+D. 可以使用匿名 namespace 封装或 static 修饰，推荐使用 static
+【答案】C
+【题解】
+C选项，这是符合当前主流 C++ 开发规范的做法，尤其在大型项目中，匿名命名空间提供了更好的可维护性和扩展性。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2004
+【题目】（单选）根据公司C++通用编程规范，下列命名中最合适的是
+A. VOS_UINT32* pulReadLen;
+B. std::string strName;
+C. struct stShape;
+D. using UserAccount = std::map<std::string, int>;
+【答案】D
+【题解】
+A命名缩写不清楚
+BC匈牙利命名，不推荐
+匈牙利命名：变量名=属性+类型+对象描述
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2005
+【题目】（单选）以下哪个是C++11以后推荐使用定义类型别名
+A. #define Handle void*
+B. typedef void* Handle;
+C. using Handle = void*
+D. using void* = Handle;
+【答案】C
+【题解】
+C++11以后推荐使用using定义类型别名
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2006
+【题目】（单选）有以下类型别名定义代码
+```
+template
+using constptr = const T*;
+template
+using constptr2 = const constptr;
+```
+则 constptr2 的类型等价于（）
+A. const char **
+B. const char ** const
+C. char * const * const
+D. const char* const*
+【答案】D
+【题解】
+const char*, char const*, char*const的区别
+const放在变量和类型名前后一样
+char * const cp; ( * 读成 pointer to ) cp is a const pointer to char
+const char * p; p is a pointer to const char;
+char const * p; 同上因为C++里面没有const*的运算符，所以const只能属于前面的类型。
+
+char * const cp : 定义一个指向字符的指针常数，即const指针
+const char* p : 定义一个指向字符常数的指针
+char const* p : 等同于const char* p
+
+这里，const(const(char*)*)先是const, 然后才是里面的const(char*)* 即xx is a pointer to const char*
+char * const * const 拆解从右往左读
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2007
+【题目】（单选）以下代码中符合编程规范的是（）
+A. int sum = num++ + num++;
+B. int sum = (num++)+(num++);
+C. int sum = Func(num++,num);
+D. num++;
+int sum = num + num;
+【答案】D
+【题解】
+A：同一个表达式中对同一变量进行多次修改而不加序列点会导致未定义行为
+B：没有明确的序列点来界定两个 num++ 的执行顺序，未定义行为，不符合规范
+C：函数参数的求值顺序是未指定的（unspecified），也就是说编译器可以任意决定哪个参数先计算。因此，如果 Func 内部依赖于 num 的值，就会导致未定义行为（因为 num 被修改了两次）
+D正确
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2008
+【题目】（单选）下面语句是声明的是（）
+A. extern int Errno = 0;
+B. int Errno;
+C. extern void Reset(){ /* .... */ }
+D. extern int Errno;
+【答案】D
+【题解】
+A：这是一个定义，包含初始化值=0，不是声明
+B：这是一个定义，因为创建了变量 Errno 并分配了内存
+C：这是一个定义，因为函数体 { /* .... */ } 存在
+D：这是一个声明，因为：使用了 extern 关键字，没有初始化值，只声明了变量的存在和类型，没有分配内存
+声明：变量声明会告知编译器变量的名称和类型，但不会为变量分配内存。在使用变量之前，必须先进行声明
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2009
+【题目】（多选）以下代码存在哪些问题？
+```
+size_t width = ReadByte();
+size_t height = ReadByte();
+size_t total = width * height;
+void bitmaps = malloc(total);
+```
+A. 未检查返回值
+B. 为受控的内存分配
+C. 整数溢出
+D. 缓冲区溢出
+
+【答案】ABC
+【题解】
+AB也存在读取溢出，但是是整形溢出，不是缓冲区溢出。缓冲区只指数组或者字符串形式的变量。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2010
+【题目】（单选）函数Print的功能是对自定义类型MyClass中的值进行调试打印，不会对MyClass对象进行任何修改，则下列函数声明中符合hawk C++语言编程规范的是（）
+A. void Print(std::unique_ptr obj);
+B. void Print(const std::unique_ptr& obj);
+C. void Print(std::shared_ptr obj);
+D. void Print(const MyClass& obj);
+【答案】D
+【题解】
+unique_ptr不可复制，shared_ptr不建议使用
+（20230419考）
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2011
+【题目】（单选）以下代码所定义的宏名，符合hawk C++语言编程规范中的原则、要求和建议的是（）
+A. #define VOS_H
+B. #define _VOS_H
+C. #define VOS_H
+D. #define _VOS_ 应尽量避免使用宏定义，如果必须使用宏，要保证宏名字的唯一性。
+【答案】A
+【题解】前后不应该有下划线
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2012
+【题目】（单选）符合规范的是（）
+A. char letter{ 'a' }
+unsigned char num{0}
+B. signed char letter{ 'a' }
+unsigned char num{0}
+C. unsigned char letter{ 'a' }
+unsigned char num{0}
+D. char letter{ 'a' }
+char num{0}
+【答案】A
+【题解】
+EXP.13-CPP signed char 和 unsigned char 类型只能用于数值的存储和使用
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2013
+【题目】（多选）ADD是宏，可能存在问题的宏（）
+A. ADD(a,b)
+B. ADD(Foo(), Bar())
+C. ADD(100,200)
+D. ADD(a++, b++)
+【答案】BD
+【题解】
+B：参数是函数调用，函数可能有副作用，如果 Foo() 和 Bar() 有副作用，或者返回值被多次调用，就会产生未定义行为
+D：参数是带副作用的表达式（自增操作），同一变量被多次修改，违反C++标准中关于未定义行为的规定
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2014
+【题目】（多选）关于圈复杂度，描述正确的是（）
+A. 圈复杂度越高越好
+B. 大函数里面含有多个功能，可以考虑将单一功能提取出来封装为函数
+C. 合理使用表驱动方式来降低圈复杂度
+D. 圈复杂度整改是让我们代码可读性和可维护性更好，而不是纯粹降低指标
+【答案】BCD
+【题解】
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2015
+【题目】（多选）关于程序注释，哪些描述是正确的
+A. 注释越多越好
+B. 文件头部应进行注释
+C. 重点在代码中巧妙的、晦涩的、有趣的、重要的地方加以注释
+D. 注释中可以使用自定义缩略语
+【答案】BC
+【题解】
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2016
+【题目】（多选）下面代码段声明或定义了一些标识符，请选出所有违反了公司C++通用编程关于标识符命名规则的行号：
+```
+typedef struct {
+int boardId; // 告警所在的板 ID
+int faultId; // 告警 ID
+unsigned char *pPara; // 告警定位参数
+unsigned char state; // 告警的当前状态
+} INH_ALM_INFO;
+```
+A. 第4行 unsigned char *pPara; // 告警定位参数
+B. 第2行 int boardId; // 告警所在的板 ID
+C. 第5行 unsigned char state; // 告警的当前状态
+D. 第6行 } INH_ALM_INFO;
+【答案】AD
+【题解】
+pPara为匈牙利命名法；INH_ALM_INFO为类型名应当用大驼峰。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】表达式与语句
+【题号】2017
+【题目】（多选）以下标识符的申明或定义，错误的有
+A. undef _LINE
+B. define MODULE_INCLUDE
+C. void *malloc(size_t nbytes);
+D. define SIZE_MAX 80
+【答案】ABCD
+【题解】
+A 下划线开头
+B 规范要求不能定义空的宏
+C 和关键字冲突、函数名要大驼峰
+D 规范要求不允许使用宏来表示常量,建议使用const常量
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2018
+【题目】（多选）关于代码可读性，下面说法正确的是
+A. 禁止使用难懂的技巧性很高的语句
+B. 源程序中关系较为紧密的代码应尽可能相邻
+C. 避免使用不易理解的数字，用有意义的标识来替代
+D. 避免使用默认优先级
+【答案】BCD
+【题解】
+A：少用，不是禁用
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2019
+【题目】（单选）下面哪一项符合 hawkC++编程规范(D)
+A. 
+```
+Object&& Function(){
+    Object o;
+    return std::forward<Object>(o);
+}
+```
+B. 
+```
+Object& Function(){
+    Object o;
+    return o;
+}
+```
+C. 
+```
+Object&& Function(){
+    Object o;
+    return std::move(o);
+}
+```
+D. 
+```
+Object Function(){
+    Object o;
+    return o;
+}
+```
+【答案】D
+【题解】
+A：std::forward<Object>(o) 用于完美转发，但这里的 o 是一个左值（局部变量）
+B：局部变量 o 在函数结束时被销毁，返回其引用会导致悬空指针
+C：G.FUN.07-CPP 不要使用std::move返回函数局部变量，对局部变量使用std::move破坏了类型一致性，阻止编译器的返回值优化。任何时候返回一个局部变量，都不应当使用std::move
+------------
+
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2020
+【题目】（多选）符合规范的是
+A. 
+```
+S Fun(){
+    S result;
+    return std::move(result);
+}
+```
+B. 
+```cpp
+S Fun(){
+    S result;
+    return result;
+}
+```
+C. 
+```
+S && Fun(){
+    S result;
+    return std::move(result);
+}
+```
+D. 
+```
+S && Fun(){
+    S result;
+    return std::forward<S>(result);
+}
+```
+【答案】BC
+【题解】
+A：std::move 需要传入参数，这里缺少了括号和参数
+D：std::forward 应用于模板参数的完美转发，result 是一个左值（局部变量），不能完美转发
+------------
+
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2021
+【题目】（多选）符合规范的是
+A. x = a + b & 5;
+B. x = 1 << (2 + 3);
+C. x = a&&b&&c
+D. x = a+b+c
+【答案】BCD
+【题解】
+参考C++规范 G.EXP.30-CPP 用括号明确表达式的操作顺序，避免过分依赖默认优先级
+涉及逻辑位运算，需要括号
+涉及位移运算，需要括号
+操作符不同，建议括号
+A 涉及逻辑位运算没加括号
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2022
+【题目】（多选）数组哪些是符合规范的：
+A. int a[2][4] = {{1,2,3},{4,5},{6}};
+B. int a[][3] = {{1,2,3},{4,5,6}};
+C. int a[2][] = {{1,2,3},{4,5,6}};
+D. int a[10] = {5,6,7,8,9,10};
+【答案】BD
+【题解】
+A 声明2行，实际3行
+C 指明2行但没指明列，不行
+自己编译器跑一次也知道
+20230322真题
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2023
+【题目】（单选）根据hawkC++语言编程，当项目选择驼峰命名风格时，下列命名中符合规范要求的是（）
+A. 局部变量 std::unit32_t* pulReadLen;
+B. 局部变量 std::string strName;
+C. 类型声明 struct stShape;
+D. 类型别名 using UserAccout = std::map<std::string, int>;
+【答案】D
+【题解】
+A 中的"应为辅变量"；B 中涉嫌使用匈牙利风格(str可以认为是string类型)；C 中结构体应该用大驼峰。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2024
+【题目】（多选）根据公司C++通用编程规范，对于类型命名，下面说法正确的是：
+A. 枚举类型命名应该是大驼峰
+B. 类的命名应该是大驼峰
+C. 联合体的命名应该是大驼峰
+D. typedef 类型别名应该是大驼峰
+E. 命名空间应该是大驼峰
+F. 结构体的命名应该是大驼峰
+【答案】ABCDEF
+【题解】
+------------
+【科目】科目二  
+【认证级别】工作级  
+【标签】C++编程规范  
+【题号】  2025
+【题目】（多选）根据公司C++通用编程规范，对于空格的处理，下面写法正确的有  
+A. vector<string> strings  
+B. static_cast<char*>(number)  
+C. int MyClass::GetValue() const { }  
+D. class Sub : public Base { }  
+E. MyClass::MyClass(int var): someVar(var) { DoSomething(); }  
+【答案】ABCD  
+【题解】  
+E中的var)与冒号应该空一格
+------------
+【科目】科目二  
+【认证级别】工作级  
+【标签】C++编程规范  
+【题号】  2026
+【题目】（多选）根据华为C/C++语言编程规范，下列哪些无限循环是允许的？（）  
+A. 嵌入式设备的操作系统或主流程，可能使用无限循环。  
+B. 操作系统软件的IDLE线程，可能需要无限循环。  
+C. 操作系统在不可恢复的错误中，为避免更多错误发生，进入指令无限循环。  
+D. 当算法类函数因为错误的输入导致无法算出可行解时，可以无限循环  
+【答案】ABC 
+【题解】  
+C&C++规则1.4.1：循环必须有退出条件。ABC都是规范中的例外，函数错误不在例外内  
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】头文件与源文件
+【题号】2027
+【题目】（单选）使用标准的头文件包含顺序可增强可读性，避免隐匿依赖，建议的头文件包含顺序为
+A. .c文件对应的.h，本项目内其他的.h，C标准库，系统库的.h
+B. C标准库，系统库的.h，.c文件对应的.h，本项目内其他的.h
+C. .c文件对应的.h，C标准库，系统库的.h，本项目内其他的.h
+D. C标准库，系统库的.h，本项目内其他的.h，.c文件对应的.h
+【答案】C
+【题解】建议按照稳定度排序：cpp对应的头文件,
+C/C++标准库, 系统库的.h, 其他库的.h, 本项目内其他的.h
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】头文件与源文件
+【题号】2028
+【题目】（单选）如果a.c包含了头文件a.h，a.c包含了头文件o.h，b.c也包含了o.h，那么当o.h发生改变时，哪些文件会被重新编译？
+A. a.c
+B. b.c
+C. a.c和b.c
+D. 如果修改的是注释内容，不会被重新编译
+【答案】C
+【题解】
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2029
+【题目】（单选）以下描述符合C++语言编程规范的是：
+A. 为了适应不定数量参数的要求，优先定义C风格的变参数函数
+B. 可以使用可变参数模板替代一部分C风格变参函数
+C. 优先使用void*类型参数来实现这型
+D. 设计函数时，优先使用输出参数而非返回值
+【答案】B
+【题解】
+A：C风格变参函数（如 printf）存在类型不安全、容易出错的问题，C++提供了更安全的替代方案，如可变参数模板
+C：void* 是不安全的，缺乏类型检查，C++推荐使用模板或具体类型参数
+D：现代C++编程规范倾向于优先使用返回值，因为：返回值更安全、类型安全，便于链式调用，符合RAII原则，更符合现代C++设计理念
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】头文件与源文件
+【题号】2030
+【题目】（单选）下面符号集中，全部都可能导致命令注入风险的是：
+A. 管道符(' | ')，内联命令(' &', ' & & ')，重定向符(' >', ' <', '>>', '', '<<')，反引号(' ')，通配符(' * ')
+ B. 逗号(',')，内联命令(' &', ' & & ')，重定向符(' >', ' <'),反引号(' ` ')，逻辑操作符(' ') 
+C. 管道符(' | ')，内联命令(' &', ' & & ')，逻辑操作符(' ')，反引号(' ` ')，单引号(' ' ')
+D. 管道符(' | ')，内联命令(' &', ' & & ')，重定向符(' >', ' <')，等号(' =')，结束符(' \0 ')
+【答案】A
+【题解】
+管道符(’|’)，内联命令(’;’,’&’)，重定向符(’>’,’<’,">>","<<")，反引号(’')，感叹号('!') ，通配符(' * ')，单引号(' ' ')，等号(' =')，结束符(' \0 ')都有注入风险
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】头文件与源文件
+【题号】2031
+【题目】（多选）关于函数设计，下面说法不正确的有
+A. 应该设计尽量多用途面面俱到的函数，参数要五个以上
+B. 函数中冗余代码只要不影响函数效率，可以不删除
+C. 函数可以不注释
+D. 函数的入参应该先检查有效性再使用
+【答案】ABC
+【题解】
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】头文件与源文件
+【题号】2032
+【题目】（多选）关于不安全函数或对象的描述，正确的是
+A. 应该禁止使用strcpy、strcat等不安全字符串处理函数，最好使用不存在安全风险的
+strncpy、strncat等带n版本函数
+B. std::ostringstream的使用应该特别注意，稍不慎就可能导致内存访问越界、缓冲区溢出等问题，因此推荐使用std::ostream代替
+C. system()函数和popen()函数的使用可能会导致命令注入的发生，替代方案：在
+windows下可以使用Win32 API CreateProcess()函数，在linux下可使用exec()族函数
+D. 在C++程序中，应尽量使用C++标准库函数代替C的字符串操作函数
+【答案】CD
+【题解】
+A选项提到的均不建议使用，应该使用后缀带_s的函数
+B选项编程规范原文为：使用C++提供的 std::format() 、 std::ostringstream 等方法进行格式化，替代 sprintf 、snprintf 、 snprintf_s 等C函数
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2033
+【题目】（多选）说法正确C++编程规范
+A. rand()函数用于生成安全算法的随机数
+B. 使用白名单机制码，确保作为 dlopen/LoadLibrary 等模块加载函数的参数不收任何外来数据的影响
+C. 执行系统 shell 中的文件操作命令时，优先使用 system(), popen(), WinExec(), ShellExecute()
+D. 使用预处理语句进行参数化查询可以防御 SQL 注入攻击
+【答案】BD
+【题解】
+A：rand()函数是不安全的随机数算法
+C：规则6.1：禁止外部可控数据作为system、popen、WinExec、ShellExecute、execl, execlp, execle, execv, execvp、CreateProcess等进程启动函数的参数
+如果需要使用system()、popen()、WinExec()、ShellExecute()，请使用白名单机制校验其参数，确保这些函数的参数不受任何外来数据的命令注入影响
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2034
+【题目】（多选）下面哪些函数都是不可重入函数，需谨慎使用
+A. strtok, strerror, setlocale, tmpnam
+B. socket, strerror, gethostbyaddr, srand
+C. rand, getenv, setlocale, asctime
+D. asctime, ctime, gethostbyname, inet_ntoa
+【答案】ACD
+【题解】
+socket一看就是可重入
+可重入函数是指能够被多个线程“同时”调用的函数，并且能保证函数结果正确不必担心数据错误的函数。
+不可重入函数是指不能运行在多任务环境下，除非能保证互斥的函数。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2035
+【题目】（多选）下列哪些函数属于可重入函数
+A. fork()
+B. read()
+C. socket()
+D. strcpy()
+【答案】ABCD
+【题解】
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2036
+【题目】（多选）下面使用安全函数不符合编程规范的是（）
+A. void ADP_memcpy_s(void* dest, const void* src, size_t count)
+{
+(void)memcpy_s(dest, count, src, count);
+}
+B. void ADP_memcpy_s(void* dest, size_t destSize, const void* src, size_t count)
+{
+(void)memcpy_s(dest, destSize, src, count);
+}
+C. errno_t ADP_memcpy_s(void* dest, size_t destSize, const void* src, size_t count)
+{
+return memcpy_s(dest, destSize, src, count);
+}
+D. #define ADP_memcpy_s memcpy_s
+E. #define ADP_memcpy_s(dest, destSize, src, count) memcpy_s((dest), (destSize), (src), (count))
+
+【答案】ABCDE
+【题解】
+memcpy_s是安全函数，安全函数不允许封装
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++错误处理
+【题号】2037
+【题目】（单选）正确的接异常方式为：
+A. catch(...) {}
+B. catch(const SomeException &e) {}
+C. catch(SomeException& e) {}
+D. catch(SomeException&& e) {}
+【答案】B
+【题解】
+编程规范里说，以左值引用的形式捕获异常
+左值有明确的变量名和确定的存储地址，右值是临时存在的，命令结束就销毁
+左值引用与右值引用是引用类型的左值与右值，左值引用的特性与左值相同，右值引用同理，如
+string &s = "123" // error，编译错误
+const string &s = "123" // ok
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++错误处理
+【题号】2038
+【题目】（单选）下面的异常规范声明不正确的是：
+A. void f() throw(int);
+B. void (*pf)() throw(int);
+C. typedef void (*gf)() throw(int);
+D. class A{void f() throw(int);}
+【答案】C
+【题解】声明异常禁止使用typedef
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++错误处理
+【题号】2039
+【题目】（多选）类A和其他类之间没有继承关系，也不包含任何非静态成员变量，A的析构函数在设计上保证不会抛出异常。下列A的析构函数的声明方式中，符合《hawkC++语言编程规范》中关于错误处理的原则的有：
+A. ~A() noexcept(false);
+B. ~A() noexcept;
+C. ~A();
+D. ~A() noexcept(true);
+【答案】BCD
+【题解】
+False不选
+A 的意思是可能抛出异常
+将不会抛出异常的函数声明为 noexcept
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++异常处理
+【题号】2040
+【题目】（多选）A是一个类，且设计保证它的析构函数不会抛出异常，下列哪些函数符号hawk编译规范（）。
+A. A(){noexcept(false){}}
+B. A(){noexcept(true){}}
+C. A(){noexcept{}}
+D. A(){}
+【答案】BC
+【题解】
+False不选，注意这次是普通函数，不是析构函数。Noexcept默认true 函数默认抛出异常（两者反的）
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2041
+【题目】（单选）以下代码片段存在的安全缺陷是：
+```
+int32 mlen = 0;
+uint8 msg[BUFFER_SIZE];
+...
+while(1) {
+    ...
+    /* read pipe name size */
+    if (read(s, (void *)&mlen, 4) != 4) {
+        ...
+        break;
+    }
+    ...
+    /* read pipe name */
+    if (read(s, msg, mlen) != mlen || msg[0] != 0) {
+        ...
+        break;
+    }
+    ...
+}
+...
+```
+A. 内存泄漏
+B. 缓冲区溢出
+C. 死循环
+D. 越界读
+【答案】B
+【题解】
+没有限制mlen的大小
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2042
+【题目】（单选）下面的代码会导致什么安全漏洞
+```
+#define NAME_MAX 128
+int SaveName(const char* name)
+{
+    char devName[NAME_MAX];
+    if (name == NULL) {
+        return -1;
+    }
+    ret = sprintf_s(devName, NAME_MAX, name);
+    ...
+    return 0;
+}
+```
+A. 缓冲区溢出
+B. 引用空指针
+C. 命令注入
+D. 未受控的格式化字符串
+【答案】D
+【题解】
+参数3的格式未受控制
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2043
+【题目】（单选）如下代码可能存在哪种安全问题？
+```
+char resolvedPath[100] = {0};
+char *res = realpath(path, resolvedPath);  //path 相对路径转绝对路径然后储存
+```
+A. 使用过的函数
+B. 命令注入
+C. 缓冲区溢出
+D. 未捕获异常
+【答案】C
+【题解】
+传数组没一起传长度
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2044
+【题目】（单选）如下代码可能存在何种安全问题？
+```
+class Student {
+private:
+    int num;
+    char *name;
+public:
+    Student();
+    ~Student();
+};
+
+Student::Student() {
+    name = new char[20];
+}
+
+Student::~Student() {
+    delete name;
+    name = NULL;
+}
+
+int main() {
+    Student s1;
+    Student s2(s1);
+    return 0;
+}
+```
+A. 内存泄露  
+B. 数组下标越界  
+C. 堆栈溢出  
+D. 内存重复释放  
+【答案】A  
+【题解】  
+代码中定义了一个`Student`类，其中包含一个动态分配的字符数组`name`。在构造函数中动态分配内存，在析构函数中释放内存。但是在`main`函数中，创建了两个`Student`对象`s1`和`s2`，并且`s2`是通过`s1`的拷贝构造函数创建的。然而，代码中没有提供拷贝构造函数，这会导致`name`指针的浅拷贝，即`s1`和`s2`共享同一个`name`指针。当`s1`和`s2`对象销毁时，析构函数会被调用两次，导致内存被重复释放，从而引起内存错误。因此，正确答案是A，内存泄露。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2045
+【题目】（单选）下面代码的错误不包括：
+```
+static uint32_t IpcManagerQueueRecvMsg (struct IpcManager* m, IpcNodeIdType remote_id, uint_t domain, uint8_t type, void* buf, uint32_t length, void* /*ctx*/) {
+    IpcAssert (m);
+    IpcAssert (m->ipc_recv_msg_queue);
+    void* buffer = malloc (length);
+    memcpy (buffer, buf, length);
+    ...
+}
+```
+A. 引用空指针  
+B. 缓冲区溢出  
+C. 未检查返回值  
+D. 未控制的内存分配
+【答案】B
+【题解】
+A：如果这些断言失败，程序会终止
+C：malloc() 的返回值没有检查，如果分配失败，buffer 会是 NULL，但在后续的 memcpy 中会访问 NULL 指针，这会导致未定义行为
+D：malloc(length) 中的 length 来自函数参数，如果 length 是非常大的值，可能导致内存分配失败
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2046
+【题目】（单选）以下代码中哪些有溢出风险
+A. int Func(short a, short b)
+{
+return (a + b);
+}
+B. int Func(signed char a, signed char b)
+{
+return (a + b);
+}
+C. long long int Func(int a, int b)
+{
+return (a + b);
+}
+D. long long int Func(int a, int b)
+{
+return ((long long int)a + b);
+}
+【答案】C
+【题解】
+short和short，char和char相加会自动转换为int类型计算，而int和int相加的时候不会自动扩展为long long int进行相加，这种情况下就会出现溢出。
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2047
+【题目】（单选）如下代码可能存在什么安全问题
+```
+char resolvePath[500] = {0};
+char *res = realpath(path, resolvePath);
+```
+A. 使用过时的函数
+B. 缓冲区溢出
+C. 命令注入
+D. 未捕获异常
+【答案】B
+【题解】
+解析：realpath长度有限制，具体长度和环境有关系，可能溢出
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++编程规范
+【题号】2048
+【题目】（单选）c++编程规范断言的用法()
+A. ASSERT(sizeof(int) == 4) //ASSERT是自定义宏
+B. assert(sizeof(int) == 4)
+C. ASSERT(sizeof(int) == 4)
+D. static_assert(sizeof(int) == 4)
+【答案】D
+【题解】
+G.EXP.34-CPP 编译期可确定的断言检查使用static_assert
+sizeof在编译阶段起作用
+C++11中引入了 static_assert ，用来做编译期间的断言，因此叫做静态断言
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2049
+【题目】（多选）以下代码存在整型溢出风险的有
+A. void Foo(int m, int n)
+{
+size_t s = m + n;
+if (m > 0 && n > 0 && (SIZE_MAX - m) < n) {
+// handle error...
+}
+}
+B. void Foo(int m, int n)
+{
+if (m > 0 && n > 0 && (SIZE_MAX / n) >= m) {
+size_t s = static_cast<size_t>(n * m);
+}
+}
+C. void Foo(int m, int n)
+{
+size_t s = 0;
+if (m < 0 || n < 0 || (SIZE_MAX - m) < n) {
+// handle error...
+return;
+}
+s = static_cast<size_t>(m) + static_cast<size_t>(n);
+}
+D. void Foo(int m, int n)
+{
+if (m > 0 && n > 0 && (SIZE_MAX / n) >= m) { //SIZE_MAX可能大于int也可能小
+size_t s = n * m;
+}
+}
+【答案】ABD
+【题解】
+int 和int相加不会自动转换longlong
+BD中可能有负数情况
+------------
+【科目】科目二
+【认证级别】工作级
+【标签】C++安全缺陷
+【题号】2050
+【题目】（多选）执行下面程序，会产生什么后果？
+```
+#define MAX 255
+int main(void)
+{
+    unsigned char A[MAX], i;
+
+    for (i = 0; i <= MAX; ++i) {
+        A[i] = i;
+    }
+    return 0;
+}
+```
+A. 数组越界
+B. 死循环
+C. 堆溢出
+D. 内存泄漏
+
+【答案】AB
+【题解】
+------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
