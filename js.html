@@ -400,3 +400,199 @@
         const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
         progressBar.style.width = `${progress}%`;
     }
+      // 检查答案
+    function checkAnswer() {
+        const question = questions[currentQuestionIndex];
+        const correctAnswer = question.answer;
+        const userAnswer = userAnswers[question.number] || '';
+
+        // 判断是否是多选题
+        const isMultiChoice = question.title.includes('多选');
+
+        let isCorrect = false;
+        if (isMultiChoice) {
+            // 多选题
+            const userSelected = Array.isArray(userAnswer) ?
+                userAnswer.sort().join('') : userAnswer;
+            const correctSelected = correctAnswer.split('').sort().join('');
+            isCorrect = userSelected === correctSelected;
+        } else {
+            // 单选题
+            isCorrect = userAnswer === correctAnswer;
+        }
+
+        // 显示正确和错误答案
+        optionsContainer.querySelectorAll('.option').forEach(option => {
+            const key = option.dataset.key;
+            option.classList.remove('correct', 'incorrect');
+
+            if (correctAnswer.includes(key)) {
+                option.classList.add('correct');
+            }
+
+            if (Array.isArray(userAnswer)) {
+                if (userAnswer.includes(key) && !correctAnswer.includes(key)) {
+                    option.classList.add('incorrect');
+                }
+            } else {
+                if (userAnswer === key && !correctAnswer.includes(key)) {
+                    option.classList.add('incorrect');
+                }
+            }
+        });
+
+        // 显示题解
+        if (question.explanation) {
+            // 处理题解中的代码块
+            if (question.explanation.includes('```')) {
+                let parts = question.explanation.split('```');
+                let html = parts[0];
+
+                for (let i = 1; i < parts.length; i += 2) {
+                    if (i < parts.length) {
+                        html += `<pre>${parts[i]}</pre>`;
+                    }
+                    if (i + 1 < parts.length) {
+                        html += parts[i + 1];
+                    }
+                }
+
+                explanationContent.innerHTML = html;
+            } else {
+                explanationContent.textContent = question.explanation;
+            }
+        } else {
+            explanationContent.textContent = '无题解';
+        }
+
+        explanation.style.display = 'block';
+
+        // 如果答错了，显示加入错题本按钮
+        if (!isCorrect && userAnswer !== '') {
+            addToErrorBtn.classList.remove('hidden');
+        } else {
+            addToErrorBtn.classList.add('hidden');
+        }
+
+        // 更新统计信息
+        updateStatistics();
+    }
+
+    // 加入错题本
+    function addToErrorBook() {
+        const question = questions[currentQuestionIndex];
+
+        if (!errorBook[question.number]) {
+            errorBook[question.number] = {
+                question: question,
+                userAnswer: userAnswers[question.number]
+            };
+
+            saveUserDataToLocalStorage();
+            showNotification('已加入错题本', 'success');
+            updateQuestionList();
+            updateStatistics();
+        } else {
+            showNotification('该题已在错题本中', 'error');
+        }
+    }
+
+    // 渲染错题本
+    function renderErrorBook() {
+        errorBookList.innerHTML = '';
+
+        const errorKeys = Object.keys(errorBook);
+
+        if (errorKeys.length === 0) {
+            errorBookList.innerHTML = '<div class="no-errors">错题本为空</div>';
+            return;
+        }
+
+        const searchTerm = errorSearchInput.value.toLowerCase();
+
+        errorKeys.forEach(key => {
+            const errorItem = errorBook[key];
+            const question = errorItem.question;
+
+            // 搜索过滤
+            if (searchTerm && !question.title.toLowerCase().includes(searchTerm) &&
+                !question.tag?.toLowerCase().includes(searchTerm) &&
+                !question.subject?.toLowerCase().includes(searchTerm)) {
+                return;
+            }
+
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-item';
+
+            const errorHeader = document.createElement('div');
+            errorHeader.className = 'error-header';
+            errorHeader.innerHTML = `
+                    <div class="error-title">${question.title}</div>
+                    <div>${question.tag || ''}</div>
+                `;
+
+            const errorContent = document.createElement('div');
+            errorContent.className = 'error-content';
+
+            // 构建错题详情
+            let optionsHtml = '';
+            question.options.forEach(option => {
+                let optionClass = '';
+
+                if (question.answer.includes(option.key)) {
+                    optionClass = 'correct';
+                }
+
+                if (Array.isArray(errorItem.userAnswer)) {
+                    if (errorItem.userAnswer.includes(option.key) && !question.answer.includes(option.key)) {
+                        optionClass = 'incorrect';
+                    }
+                } else {
+                    if (errorItem.userAnswer === option.key && !question.answer.includes(option.key)) {
+                        optionClass = 'incorrect';
+                    }
+                }
+
+                optionsHtml += `
+                        <div class="option ${optionClass}">
+                            <div class="option-key">${option.key}</div>
+                            <div class="option-text">${option.text}</div>
+                        </div>
+                    `;
+            });
+
+            // 处理题解中的代码块
+            let explanationHtml = '';
+            if (question.explanation) {
+                if (question.explanation.includes('```')) {
+                    let parts = question.explanation.split('```');
+                    explanationHtml = parts[0];
+
+                    for (let i = 1; i < parts.length; i += 2) {
+                        if (i < parts.length) {
+                            explanationHtml += `<pre>${parts[i]}</pre>`;
+                        }
+                        if (i + 1 < parts.length) {
+                            explanationHtml += parts[i + 1];
+                        }
+                    }
+                } else {
+                    explanationHtml = question.explanation;
+                }
+            } else {
+                explanationHtml = '无题解';
+            }
+
+            errorContent.innerHTML = `
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                    <div class="explanation" style="display:block">
+                        <div class="explanation-title">题解:</div>
+                        <div>${explanationHtml}</div>
+                    </div>
+                    <div class="buttons">
+                        <button class="btn btn-success" data-key="${key}">我已掌握</button>
+                        <button class="btn btn-secondary" data-key="${key}" data-index="${questions.findIndex(q => q.number === key)}">转到题目</button>
+                    </div>
+                `;
