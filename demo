@@ -1,0 +1,307 @@
+   // 切换错题内容显示/隐藏
+            errorHeader.addEventListener('click', () => {
+                const isActive = errorContent.classList.contains('active');
+                errorContent.classList.toggle('active');
+            });
+
+            errorElement.appendChild(errorHeader);
+            errorElement.appendChild(errorContent);
+
+            errorBookList.appendChild(errorElement);
+        });
+
+        // 绑定按钮事件
+        errorBookList.querySelectorAll('.btn-success').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const key = btn.dataset.key;
+                delete errorBook[key];
+                saveUserDataToLocalStorage();
+                renderErrorBook();
+                updateStatistics();
+                showNotification('已从错题本移除', 'success');
+            });
+        });
+
+        errorBookList.querySelectorAll('.btn-secondary').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const index = parseInt(btn.dataset.index);
+                if (!isNaN(index) && index >= 0) {
+                    currentQuestionIndex = index;
+                    showCurrentQuestion();
+
+                    // 切换到刷题模式
+                    document.querySelector('.tab[data-tab="practice"]').click();
+                    window.scrollTo(0, 0);
+                }
+            });
+        });
+    }
+
+    // 下一题
+    function nextQuestion() {
+        if (currentQuestionIndex < questions.length - 1) {
+            currentQuestionIndex++;
+            showCurrentQuestion();
+        } else {
+            showNotification('已经是最后一题了', 'error');
+        }
+    }
+
+    // 上一题
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            showCurrentQuestion();
+        } else {
+            showNotification('已经是第一题了', 'error');
+        }
+    }
+
+    // 显示题目导航列表
+    function showQuestionList() {
+        questionList.innerHTML = '';
+
+        // 获取过滤后的题目
+        const filteredQuestions = getFilteredQuestions();
+
+        filteredQuestions.forEach((question, index) => {
+            const originalIndex = questions.findIndex(q => q.number === question.number);
+            const item = document.createElement('div');
+            item.className = 'question-item';
+            item.textContent = originalIndex + 1;
+
+            // 添加工具提示
+            item.classList.add('tooltip');
+            const tooltip = document.createElement('span');
+            tooltip.className = 'tooltiptext';
+            tooltip.textContent = question.title.length > 30 ?
+                question.title.substring(0, 30) + '...' : question.title;
+            item.appendChild(tooltip);
+
+            item.addEventListener('click', () => {
+                currentQuestionIndex = originalIndex;
+                showCurrentQuestion();
+                window.scrollTo(0, 0);
+            });
+
+            // 如果在错题本中，添加错题标记
+            if (errorBook[question.number]) {
+                item.classList.add('error');
+            } else if (userAnswers[question.number]) {
+                item.classList.add('answered');
+            }
+
+            questionList.appendChild(item);
+        });
+
+        updateQuestionList();
+    }
+
+    // 更新题目导航状态
+    function updateQuestionList() {
+        const items = questionList.querySelectorAll('.question-item');
+        items.forEach((item, index) => {
+            item.classList.remove('active');
+
+            // 找出当前项目对应的原始题目索引
+            const filteredQuestions = getFilteredQuestions();
+            if (index < filteredQuestions.length) {
+                const questionNumber = filteredQuestions[index].number;
+                const originalIndex = questions.findIndex(q => q.number === questionNumber);
+
+                if (originalIndex === currentQuestionIndex) {
+                    item.classList.add('active');
+                }
+
+                // 更新答题状态
+                item.classList.remove('answered', 'error');
+                if (errorBook[questionNumber]) {
+                    item.classList.add('error');
+                } else if (userAnswers[questionNumber]) {
+                    item.classList.add('answered');
+                }
+            }
+        });
+    }
+
+    // 过滤题目
+    function filterQuestions() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        // 重新渲染题目列表
+        showQuestionList();
+
+        // 如果当前题目不在过滤结果中，跳转到第一个过滤结果
+        const filteredQuestions = getFilteredQuestions();
+        if (filteredQuestions.length > 0) {
+            const currentQuestion = questions[currentQuestionIndex];
+            const isCurrentInFiltered = filteredQuestions.some(
+                q => q.number === currentQuestion.number
+            );
+
+            if (!isCurrentInFiltered) {
+                const firstFilteredIndex = questions.findIndex(
+                    q => q.number === filteredQuestions[0].number
+                );
+                currentQuestionIndex = firstFilteredIndex;
+                showCurrentQuestion();
+            }
+        }
+    }
+
+    // 获取过滤后的题目
+    function getFilteredQuestions() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        return questions.filter(question => {
+            // 标签过滤
+            if (activeTag && question.tag !== activeTag) {
+                return false;
+            }
+
+            // 搜索过滤
+            if (searchTerm) {
+                return (
+                    question.title.toLowerCase().includes(searchTerm) ||
+                    question.subject?.toLowerCase().includes(searchTerm) ||
+                    question.tag?.toLowerCase().includes(searchTerm) ||
+                    question.number?.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            return true;
+        });
+    }
+
+    // 过滤错题本
+    function filterErrorBook() {
+        renderErrorBook();
+    }
+
+    // 更新统计信息
+    function updateStatistics() {
+        // 计算基本统计
+        const totalCount = questions.length;
+        const answeredCount = Object.keys(userAnswers).length;
+        const errorCount = Object.keys(errorBook).length;
+
+        // 计算正确率
+        let correctCount = 0;
+        questions.forEach(question => {
+            const userAnswer = userAnswers[question.number];
+            if (userAnswer) {
+                const isMultiChoice = question.title.includes('多选');
+
+                if (isMultiChoice) {
+                    const userSelected = Array.isArray(userAnswer) ?
+                        userAnswer.sort().join('') : userAnswer;
+                    const correctSelected = question.answer.split('').sort().join('');
+                    if (userSelected === correctSelected) correctCount++;
+                } else {
+                    if (userAnswer === question.answer) correctCount++;
+                }
+            }
+        });
+
+        const correctRate = answeredCount > 0 ?
+            Math.round((correctCount / answeredCount) * 100) : 0;
+
+        // 更新DOM
+        totalCountEl.textContent = totalCount;
+        answeredCountEl.textContent = answeredCount;
+        correctRateEl.textContent = `${correctRate}%`;
+        errorCountEl.textContent = errorCount;
+
+        // 计算科目分布
+        const subjectStats = {};
+        questions.forEach(question => {
+            if (!question.subject) return;
+
+            if (!subjectStats[question.subject]) {
+                subjectStats[question.subject] = {
+                    total: 0,
+                    answered: 0,
+                    correct: 0
+                };
+            }
+
+            subjectStats[question.subject].total++;
+
+            const userAnswer = userAnswers[question.number];
+            if (userAnswer) {
+                subjectStats[question.subject].answered++;
+
+                const isMultiChoice = question.title.includes('多选');
+                let isCorrect = false;
+
+                if (isMultiChoice) {
+                    const userSelected = Array.isArray(userAnswer) ?
+                        userAnswer.sort().join('') : userAnswer;
+                    const correctSelected = question.answer.split('').sort().join('');
+                    isCorrect = userSelected === correctSelected;
+                } else {
+                    isCorrect = userAnswer === question.answer;
+                }
+
+                if (isCorrect) {
+                    subjectStats[question.subject].correct++;
+                }
+            }
+        });
+
+        // 渲染科目统计
+        renderSubjectStats(subjectStats);
+    }
+
+    // 渲染科目统计
+    function renderSubjectStats(stats) {
+        subjectStatsEl.innerHTML = '';
+
+        Object.entries(stats).forEach(([subject, data]) => {
+            const rate = data.answered > 0 ?
+                Math.round((data.correct / data.answered) * 100) : 0;
+
+            const subjectCard = document.createElement('div');
+            subjectCard.className = 'card';
+            subjectCard.innerHTML = `
+                    <h3>${subject}</h3>
+                    <div class="statistics-container">
+                        <div class="statistic-card">
+                            <div class="statistic-label">总题数</div>
+                            <div class="statistic-value">${data.total}</div>
+                        </div>
+                        <div class="statistic-card">
+                            <div class="statistic-label">已做题数</div>
+                            <div class="statistic-value">${data.answered}</div>
+                        </div>
+                        <div class="statistic-card">
+                            <div class="statistic-label">正确率</div>
+                            <div class="statistic-value">${rate}%</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${(data.answered / data.total) * 100}%"></div>
+                    </div>
+                `;
+
+            subjectStatsEl.appendChild(subjectCard);
+        });
+    }
+
+    // 显示通知
+    function showNotification(message, type = 'success') {
+        notification.textContent = message;
+        notification.className = `notification ${type} show`;
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // 初始化
+    init();
+</script>
+</body>
+</html>
