@@ -58,6 +58,9 @@ function init() {
     searchInput.addEventListener('input', filterQuestions);
     errorSearchInput.addEventListener('input', filterErrorBook);
 
+    // 自动加载题目文件
+    autoLoadQuestions();
+
     // 标签页切换事件
     mainTabs.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
@@ -119,6 +122,67 @@ function loadUserDataFromLocalStorage() {
 function saveUserDataToLocalStorage() {
     localStorage.setItem('userAnswers', JSON.stringify(userAnswers));
     localStorage.setItem('errorBook', JSON.stringify(errorBook));
+}
+
+// 自动加载题目文件
+function autoLoadQuestions() {
+    showNotification('正在加载题目...', 'success');
+    
+    // 使用 XMLHttpRequest 代替 fetch，更好地支持本地文件
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '科目二.txt', true);
+    xhr.responseType = 'text';
+    
+    xhr.onload = function() {
+        if (xhr.status === 200 || xhr.status === 0) { // 0 表示本地文件
+            const content = xhr.responseText;
+            parseQuestions(content);
+            if (questions.length > 0) {
+                // 提取所有标签
+                questions.forEach(q => {
+                    if (q.tag) tags.add(q.tag);
+                });
+
+                // 渲染标签过滤器
+                renderFilterTags();
+
+                showQuestionList();
+                showCurrentQuestion();
+                progressInfo.classList.remove('hidden');
+                updateStatistics();
+                showNotification(`已成功加载 ${questions.length} 道题目`, 'success');
+                
+                // 隐藏文件选择提示
+                const fileCard = document.querySelector('.card.hidden');
+                if (fileCard) {
+                    fileCard.style.display = 'none';
+                }
+            } else {
+                showNotification('未找到有效题目，请检查文件格式', 'error');
+                showFileInput();
+            }
+        } else {
+            console.error('加载题目失败，状态码:', xhr.status);
+            showNotification('自动加载失败，请手动选择题目文件', 'error');
+            showFileInput();
+        }
+    };
+    
+    xhr.onerror = function() {
+        console.error('加载题目文件时发生错误');
+        showNotification('自动加载失败，请手动选择题目文件', 'error');
+        showFileInput();
+    };
+    
+    xhr.send();
+}
+
+// 显示文件选择输入框
+function showFileInput() {
+    const fileCard = document.querySelector('.card.hidden');
+    if (fileCard) {
+        fileCard.classList.remove('hidden');
+    }
 }
 
 // 读取并解析TXT文件

@@ -11,14 +11,16 @@
 <div class="container">
     <div class="header">
         <h1>科目二刷题系统</h1>
+        <p style="font-size: 0.9rem; margin-top: 10px; opacity: 0.9;">题目正在自动加载中...</p>
     </div>
 
-    <div class="card">
+    <!-- 文件选择区域（自动加载失败时显示） -->
+    <div class="card hidden" id="file-upload-card">
         <div class="file-input">
             <div class="custom-file-input">
                 <input type="file" id="file-input" accept=".txt">
                 <div class="file-input-label">
-                    <span>选择题目文件</span>
+                    <span>自动加载失败，请手动选择题目文件</span>
                     <div class="file-name" id="file-name">未选择文件</div>
                 </div>
             </div>
