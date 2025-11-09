@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科目二刷题系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>科目二刷题系统</h1>
+    </div>
+
+    <div class="card">
+        <div class="file-input">
+            <div class="custom-file-input">
+                <input type="file" id="file-input" accept=".txt">
+                <div class="file-input-label">
+                    <span>选择题目文件</span>
+                    <div class="file-name" id="file-name">未选择文件</div>
+                </div>
+            </div>
+            <button class="btn" id="load-btn">加载题目</button>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        通知提示
+    </div>
+
+    <div class="tabs" id="main-tabs">
+        <div class="tab active" data-tab="practice">刷题模式</div>
+        <div class="tab" data-tab="error-book">错题本</div>
+        <div class="tab" data-tab="statistics">统计分析</div>
+    </div>
+
+    <div class="tab-content active" id="practice-content">
+        <div id="progress-info" class="progress-info hidden">
+            <span id="current-question">0</span> / <span id="total-questions">0</span> 题
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="card search-container">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-input" id="search-input" placeholder="搜索题目...">
+            <div class="filter-tags" id="filter-tags"></div>
+        </div>
+
+        <div id="question-container" class="question-container hidden">
+            <div class="question-meta">
+                <div id="question-subject"></div>
+                <div id="question-level"></div>
+                <div id="question-tag" class="question-tag"></div>
+                <div id="question-number"></div>
+            </div>
+            <div id="question-title" class="question-title"></div>
+            <div id="options" class="options"></div>
+            <div class="buttons">
+                <button class="btn" id="check-btn">检查答案</button>
+                <button class="btn btn-secondary" id="next-btn">下一题</button>
+                <button class="btn btn-secondary" id="prev-btn">上一题</button>
+                <button class="btn btn-error hidden" id="add-to-error-btn">加入错题本</button>
+            </div>
+            <div id="explanation" class="explanation">
+                <div class="explanation-title">题解:</div>
+                <div id="explanation-content"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="question-list" class="question-list"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="error-book-content">
+        <div class="card">
+            <h2>错题本</h2>
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" id="error-search-input" placeholder="搜索错题...">
+            </div>
+            <div id="error-book-list" class="error-book-list"></div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="statistics-content">
+        <div class="statistics-container">
+            <div class="statistic-card">
+                <div class="statistic-label">总题数</div>
+                <div class="statistic-value" id="total-count">0</div>
+            </div>
+            <div class="statistic-card">
+                <div class="statistic-label">已做题数</div>
+                <div class="statistic-value" id="answered-count">0</div>
+            </div>
+            <div class="statistic-card">
+                <div class="statistic-label">正确率</div>
+                <div class="statistic-value" id="correct-rate">0%</div>
+            </div>
+            <div class="statistic-card">
+                <div class="statistic-label">错题数</div>
+                <div class="statistic-value" id="error-count">0</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>科目分布统计</h2>
+            <div id="subject-stats"></div>
+            <div class="reset-container">
+                <button class="btn btn-error" id="reset-stats-btn">重置数据</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/main.js"></script>
+</body>
+</html>
