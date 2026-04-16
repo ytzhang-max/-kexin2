@@ -45,3 +45,83 @@ int main ()
     return 0;
 }
 ```
+
+A.
+
+```
+constructor of Base
+operator new
+operator delete
+destructor of Base
+```
+
+B.
+
+```
+operator new
+operator delete
+```
+
+C.
+
+```
+operator new
+constructor of Base
+destructor of Base
+operator delete
+```
+
+D.
+
+```
+constructor of Base
+destructor of Base
+```
+
+---
+**以下哪些选项的代码单独填入横线处时，整段程序可以编译通过？**（BCD）（多选）
+
+```
+#include <iostream>
+using namespace std;
+struct Complex {
+    int real;
+    int imag;
+};
+void Function(_________) // 横线处需填入代码
+{
+    cout << "Complex" << endl;
+    cout << c.real << "," << c.imag << endl;
+}
+int main()
+{
+    Function({1, 2});
+    return 0;
+}
+```
+
+A. `Complex& c`
+B. `const Complex c`
+C. `Complex c`
+D. `const Complex& c`
+
+---
+
+```
+class Data {
+public:
+    Data() = default;
+    ...... // 其他成员函数，不包括构造函数
+private:
+    ___________  // 需输入代码
+
+};
+```
+
+**以下哪些选项的代码单独填入到上面代码的横线处时，符合《华为C++语言编程规范》中关于类的成员变量初始化的原则、要求和建议？（AD）**（多选）
+A. `std::string name{"}`
+B. `std::uint32_t value`
+C. `std::string name;`
+D. `std::uint32_t value{1}`
+
+---
