@@ -24,7 +24,7 @@
 ### 方法一：直接使用（推荐）
 
 1. 下载项目到本地
-2. 用浏览器打开 `kexin2.html`
+2. 用浏览器打开 `index.html`
 3. 点击"选择题目文件"，加载题目 TXT 文件
 4. 开始刷题！
 
@@ -44,7 +44,7 @@ python -m http.server 8000
 # 或使用 Live Server 等工具
 ```
 
-访问 `http://localhost:8000/kexin2.html`
+访问 `http://localhost:8000/index.html`
 
 ## 📁 项目结构
 
@@ -53,7 +53,7 @@ python -m http.server 8000
 ├── assets/
 │   ├── styles.css          # 样式文件
 │   └── main.js             # 核心逻辑
-├── kexin2.html             # 主页面
+├── index.html             # 主页面
 ├── 科目二.txt              # 示例题目文件
 └── README.md               # 项目说明
 ```

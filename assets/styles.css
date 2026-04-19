@@ -162,6 +162,10 @@ body {
     background: linear-gradient(to right, #e53935, #ff5252);
 }
 
+.btn-warning {
+    background: linear-gradient(to right, #ff9800, #ffb74d);
+}
+
 .tabs {
     display: flex;
     margin-bottom: 20px;
@@ -265,7 +269,27 @@ body {
     cursor: pointer;
     transition: var(--transition);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+}
+
+.option-text {
+    flex: 1;
+    min-width: 0; /* 防止flex项目溢出 */
+}
+
+.option-text pre.code-block {
+    margin: 10px 0;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+}
+
+.option-text div {
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .option:hover {
@@ -380,6 +404,11 @@ body {
 .question-item.error {
     background-color: rgba(255, 82, 82, 0.1);
     border-color: var(--error-color);
+}
+
+.question-item.favorite {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-color: #ff9800;
 }
 
 .hidden {
@@ -670,4 +699,92 @@ pre.code-block {
     border-radius: 5px;
     transition: width 0.3s ease;
     width: 0%;
+}
+
+/* 科目统计样式 */
+.subject-stat {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: var(--border-radius);
+}
+
+.subject-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-color);
+}
+
+.stat-bar {
+    height: 20px;
+    background-color: #eaeaea;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.stat-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.stat-text {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: right;
+}
+
+/* 无结果提示 */
+.no-results, .no-errors {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-style: italic;
+}
+
+/* 加载状态 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 题目卡片改进 */
+.question-container pre.code-block {
+    margin: 15px 0;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+    border-left: 4px solid #ddd;
+}
+
+/* 改进的按钮组 */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-group .btn {
+    flex: 1;
+}
+
+/* 键盘快捷键提示 */
+.shortcut-hint {
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 5px;
+    text-align: center;
 }
