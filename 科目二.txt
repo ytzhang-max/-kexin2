@@ -924,3 +924,136 @@ D. 内存泄漏
 
 
 
+銆愮鐩€戠鐩簩
+銆愯璇佺骇鍒€戝伐浣滅骇
+銆愭爣绛俱€慍++缂栫▼瑙勮寖
+銆愰鍙枫€?051
+銆愰鐩€戯紙鍗曢€夛級GDB璋冭瘯涓紝甯屾湜灏嗗湴鍧€`0x12345678`寮€濮嬬殑128瀛楄妭鍐呭瓨銆佷互16杩涘埗鎵撳嵃鍑烘潵锛屼互涓嬪摢鏉″懡浠ゆ槸姝ｇ‘鐨勶紵
+A. `x/128xw` 0x12345678
+B. `x/32xg` 0x12345678
+C. `x/32xw` 0x12345678
+D. `x/128xg` 0x12345678
+銆愮瓟妗堛€慍
+銆愰瑙ｃ€?------------
+
+銆愮鐩€戠鐩簩
+銆愯璇佺骇鍒€戝伐浣滅骇
+銆愭爣绛俱€慍++缂栫▼瑙勮寖
+銆愰鍙枫€?052
+銆愰鐩€戯紙鍗曢€夛級涓嬪垪璇彞澹版槑鐨勫彉閲廯a`涓紝鍙互鐢╜std::cout << a`姝ｇ‘鎵撳嵃鍑篳Hello`瀛楃涓茬殑鏄?A. `char[2][5] = {"Hello", "World"};`
+B. `char a[] = "Hello";`
+C. `char a[][] = {'H', 'e', 'l', 'l', 'o'};`
+D. `char a[5] = "Hello"`
+銆愮瓟妗堛€態
+銆愰瑙ｃ€?------------
+
+銆愮鐩€戠鐩簩
+銆愯璇佺骇鍒€戝伐浣滅骇
+銆愭爣绛俱€慍++缂栫▼瑙勮寖
+銆愰鍙枫€?053
+銆愰鐩€戯紙鍗曢€夛級涓嬪垪绋嬪簭鐨勮緭鍑虹粨鏋滄槸
+```
+#include <iostream>
+
+class Base {
+public:
+    Base() { std::cout << "constructor of Base" << std::endl;}
+    ~Base() { std::cout << "destructor of Base" << std::endl;}
+  
+    void* operator new (size_t size)
+    {
+        std::cout << "operator new" << std::endl;
+        return ::operator new(size);
+    }
+
+    void* operator delete (void* pointer)
+    {
+        std::cout << "operator delete" << std::endl;
+        return ::operator delete(pointer);
+    }
+};
+
+int main ()
+{
+    Base *px = new Base;
+    delete px;
+    return 0;
+}
+```
+A.
+```
+constructor of Base
+operator new
+operator delete
+destructor of Base
+```
+B.
+```
+operator new
+operator delete
+```
+C.
+```
+operator new
+constructor of Base
+destructor of Base
+operator delete
+```
+D.
+```
+constructor of Base
+destructor of Base
+```
+銆愮瓟妗堛€慍
+銆愰瑙ｃ€?------------
+
+銆愮鐩€戠鐩簩
+銆愯璇佺骇鍒€戝伐浣滅骇
+銆愭爣绛俱€慍++缂栫▼瑙勮寖
+銆愰鍙枫€?054
+銆愰鐩€戯紙澶氶€夛級浠ヤ笅鍝簺閫夐」鐨勪唬鐮佸崟鐙～鍏ユí绾垮鏃讹紝鏁存绋嬪簭鍙互缂栬瘧閫氳繃锛?```
+#include <iostream>
+using namespace std;
+struct Complex {
+    int real;
+    int imag;
+};
+void Function(_________) // 妯嚎澶勯渶濉叆浠ｇ爜
+{
+    cout << "Complex" << endl;
+    cout << c.real << "," << c.imag << endl;
+}
+int main()
+{
+    Function({1, 2});
+    return 0;
+}
+```
+A. `Complex& c`
+B. `const Complex c`
+C. `Complex c`
+D. `const Complex& c`
+銆愮瓟妗堛€態CD
+銆愰瑙ｃ€?------------
+
+銆愮鐩€戠鐩簩
+銆愯璇佺骇鍒€戝伐浣滅骇
+銆愭爣绛俱€慍++缂栫▼瑙勮寖
+銆愰鍙枫€?055
+銆愰鐩€戯紙澶氶€夛級浠ヤ笅鍝簺閫夐」鐨勪唬鐮佸崟鐙～鍏ュ埌涓婇潰浠ｇ爜鐨勬í绾垮鏃讹紝绗﹀悎銆婂崕涓篊++璇█缂栫▼瑙勮寖銆嬩腑鍏充簬绫荤殑鎴愬憳鍙橀噺鍒濆鍖栫殑鍘熷垯銆佽姹傚拰寤鸿锛?```
+class Data {
+public:
+    Data() = default;
+    ...... // 鍏朵粬鎴愬憳鍑芥暟锛屼笉鍖呮嫭鏋勯€犲嚱鏁?private:
+    ___________  // 闇€杈撳叆浠ｇ爜
+
+};
+```
+A. `std::string name{"}`
+B. `std::uint32_t value`
+C. `std::string name;`
+D. `std::uint32_t value{1}`
+銆愮瓟妗堛€慉D
+銆愰瑙ｃ€?------------
+
+
