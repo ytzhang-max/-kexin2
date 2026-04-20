@@ -1,6 +1,6 @@
 // 捆绑版本 - 科目二刷题系统
 // 合并所有模块以避免ES6模块在file://协议下的限制
-// 生成时间: 2026-04-19T18:26:06.079Z
+// 生成时间: 2026-04-20T15:18:04.706Z
 
 
 // ========== src/utils.js ==========
@@ -177,47 +177,66 @@ function parseQuestions(content) {
             let j = i + 1;
             let inCodeBlock = false;
             while (j < lines.length) {
-                const nextLine = lines[j].trim();
-                // 检查是否进入或退出代码块
-                if (nextLine.startsWith('```')) {
+                const nextLine = lines[j];
+                const trimmedNextLine = nextLine.trim();
+                
+                // 检查是否进入或退出代码块（仅检查trim后的行）
+                if (trimmedNextLine.startsWith('```')) {
                     inCodeBlock = !inCodeBlock;
                 }
+                
                 // 如果遇到下一个标签或题目分隔符，停止读取
-                // 但如果在代码块中，继续读取
-                if (!inCodeBlock && (nextLine.match(/^[A-Z]\. /) || nextLine.startsWith('【') || nextLine === '------------')) {
+                if (trimmedNextLine.startsWith('【') || trimmedNextLine === '------------') {
                     break;
                 }
-                title += '\n' + lines[j]; // 保留原始行内容
+                
+                // 如果遇到选项模式（A. B. C. D.）且不在代码块内部，停止读取题目
+                // 匹配英文点号(.)或中文点号(．)，后面可能有空格
+                if (trimmedNextLine.match(/^[A-D][\.\．][\s\u3000]*/) && !inCodeBlock) {
+                    break;
+                }
+                
+                title += '\n' + nextLine; // 保留原始行内容
                 j++;
             }
             currentQuestion.title = title;
+            i = j - 1; // 更新索引到已处理的位置
         } else if (currentQuestion && line.startsWith('【答案】')) {
             currentQuestion.answer = line.replace('【答案】', '').trim();
         } else if (currentQuestion && line.startsWith('【题解】')) {
             currentQuestion.explanation = '';
             inExplanation = true;
-        } else if (currentQuestion && line.match(/^[A-Z]\. /)) {
+        } else if (currentQuestion && line.match(/^[A-Z][\.\．][\s\u3000]*/)) {
             const key = line[0];
-            let text = line.substring(3).trim(); // 提取选项键和初始文本
+            // 提取选项键和初始文本，处理"A. "或"A."格式
+            const textStart = line.indexOf('.');
+            let text = textStart >= 0 ? line.substring(textStart + 1).trim() : '';
             let j = i + 1;
             let inOptionCodeBlock = false;
             // 继续读取后续行直到遇到下一个选项、答案、题解或题目结束
             while (j < lines.length) {
-                const nextLine = lines[j].trim();
+                const nextLine = lines[j];
+                const trimmedNextLine = nextLine.trim();
+                
                 // 检查是否进入或退出代码块
-                if (nextLine.startsWith('```')) {
+                if (trimmedNextLine.startsWith('```')) {
                     inOptionCodeBlock = !inOptionCodeBlock;
                 }
+                
                 // 检查是否是下一个选项、答案、题解或题目分隔符
-                // 但如果在代码块中，继续读取
-                if (!inOptionCodeBlock && (nextLine.match(/^[A-Z]\. /) ||
-                    nextLine.startsWith('【答案】') ||
-                    nextLine.startsWith('【题解】') ||
-                    nextLine === '------------')) {
+                // 即使inOptionCodeBlock为true，这些结构标记也不可能出现在代码块中间
+                if (trimmedNextLine.startsWith('【答案】') || trimmedNextLine.startsWith('【题解】') || trimmedNextLine === '------------') {
                     break;
                 }
+                
+                // 检查是否是下一个选项（A. B. C. D.）
+                // 如果不在代码块中，遇到下一个选项就停止
+                if (trimmedNextLine.match(/^[A-Z][\.\．][\s\u3000]*/) && !inOptionCodeBlock) {
+                    break;
+                }
+                
                 // 添加到选项文本中，保留原始换行
-                text += '\n' + lines[j]; // 使用原始行（包含空格和空行）
+                text += '\n' + nextLine; // 使用原始行（包含空格和空行）
                 j++;
             }
             // 更新i的值到已处理的位置
